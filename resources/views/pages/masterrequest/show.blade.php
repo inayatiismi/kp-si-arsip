@@ -18,13 +18,13 @@
                         <tr>
                             <td>Nomor Berkas</td>
                             <td>:</td>
-                            <td>{{ $request->nomorberkas }}</td>
+                            <td>{{ $request_surat->suratMasuk->nomor_berkas }}</td>
                         </tr>
                         <tr>
                             <td>Jenis Surat</td>
                             <td>:</td>
                             <td>
-                                @if ($request->jenissurat == 'masuk')
+                                @if ($request_surat->jenis_surat_id == getConstants()::JENIS_SURAT_MASUK)
                                     Surat Masuk
                                 @else
                                     Surat Keluar
@@ -34,32 +34,32 @@
                         <tr>
                             <td>Alamat Surat</td>
                             <td>:</td>
-                            <td>{{ $request->alamatsurat }}</td>
+                            <td>{{ $request_surat->suratMasuk->alamat_pengirim }}</td>
                         </tr>
                         <tr>
                             <td>Tanggal Surat</td>
                             <td>:</td>
-                            <td>{{ date('l, d M Y', strtotime($request->tanggalsurat)) }}</td>
+                            <td>{{ date('l, d M Y', strtotime($request_surat->suratMasuk->tanggal_masuk)) }}</td>
                         </tr>
                         <tr>
                             <td>Perihal</td>
                             <td>:</td>
-                            <td>{{ $request->perihal }}</td>
+                            <td>{{ $request_surat->suratMasuk->perihal }}</td>
                         </tr>
                         <tr>
                             <td>Nomor Petunjuk</td>
                             <td>:</td>
-                            <td>{{ $request->nomorpetunjuk }}</td>
+                            <td>{{ $request_surat->suratMasuk->nomor_petunjuk }}</td>
                         </tr>
                         <tr>
                             <td>Status</td>
                             <td>:</td>
                             <td>
-                                @if ($request->status == 'proses')
+                                @if ($request_surat->status_id == getConstants()::STATUS_ON_PROCESS)
                                     <span class="badge badge-info">
                                         Dalam Proses
                                     </span>
-                                @elseif ($request->status == 'sukses')
+                                @elseif ($request_surat->status_id == getConstants()::STATUS_ACCEPTED)
                                     <span class="badge badge-success">Sukses</span>
                                 @else
                                     <span class="badge badge-danger">Gagal</span>
@@ -69,16 +69,16 @@
                         <tr>
                             <td>Keterangan</td>
                             <td>:</td>
-                            <td>{{ $request->keterangan }}</td>
+                            <td>{{ $request_surat->keterangan }}</td>
                         </tr>
                         <tr>
                             <td>File</td>
                             <td>:</td>
                             <td>
-                                @if ($request->jenissurat == 'masuk')
-                                    @isset($request->suratMasuk->media[0])
-                                        <a href="{{ $request->suratMasuk->media[0]->getFullUrl() }}" target="_blank">
-                                            {{ $request->suratMasuk->media[0]->file_name }}
+                                @if ($request_surat->jenis_surat_id == getConstants()::JENIS_SURAT_MASUK)
+                                    @isset($request_surat->suratMasuk->media[0])
+                                        <a href="{{ $request_surat->suratMasuk->media[0]->getFullUrl() }}" target="_blank">
+                                            {{ $request_surat->suratMasuk->media[0]->file_name }}
                                         </a>
                                     @endisset
                                 @endif
@@ -86,7 +86,7 @@
                         </tr>
                     </table>
                 </div>
-                @if ($request->status == 'proses')
+                @if ($request_surat->status_id == getConstants()::STATUS_ON_PROCESS)
                 <div class="card-footer text-center">
                     <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#terimaModal">Terima Surat</a>
                     <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#tolakModal">Tolak Surat</a>
@@ -108,7 +108,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="{{ route('requests.update', $request->id_requests) }}" method="POST">
+        <form action="{{ route('admin.request-surat.update', $request_surat->id) }}" method="POST">
             @csrf
             @method('PUT')
             <input type="hidden" name="action" value="accept">
@@ -137,7 +137,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="{{ route('requests.update', $request->id_requests) }}" method="POST">
+        <form action="{{ route('admin.request-surat.update', $request_surat->id) }}" method="POST">
             @csrf
             @method('PUT')
             <input type="hidden" name="action" value="decline">

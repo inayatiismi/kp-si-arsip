@@ -52,8 +52,9 @@ class SuratMasukController extends Controller
         $surat_masuk->save();
 
         $dataRequest = [
+            'surat_masuk_id' => $surat_masuk->id,
             'jenis_surat_id' => Constants::JENIS_SURAT_MASUK,
-            'surat_masuk_id' => $surat_masuk->id
+            'status_id' => Constants::STATUS_ON_PROCESS
         ];
 
         $surat_masuk->request()->create($dataRequest);

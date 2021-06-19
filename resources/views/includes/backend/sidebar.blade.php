@@ -1,56 +1,56 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-<!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-    <div class="sidebar-brand-icon rotate-n-15">
-        <i class="fas fa-mail-bulk"></i>
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-mail-bulk"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">SIARSIP </div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" href="{{ route('dashboard') }}">
+            <i class="fas fa-fw fa-home"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        ADMIN
     </div>
-    <div class="sidebar-brand-text mx-3">SIARSIP </div>
-</a>
-
-<!-- Divider -->
-<hr class="sidebar-divider my-0">
-
-<!-- Nav Item - Dashboard -->
-<li class="nav-item active">
-    <a class="nav-link" href="{{ route('dashboard')}}">
-        <i class="fas fa-fw fa-home"></i>
-        <span>Dashboard</span></a>
-</li>
-
-<!-- Divider -->
-<hr class="sidebar-divider">
-
-<!-- Heading -->
-<div class="sidebar-heading">
-    ADMIN
-</div>
-<!-- Nav Item - Pages Collapse Menu -->
-<li class="nav-item">
-    <a class="nav-link" href="{{route('admin.surat-masuk.index')}}">
-        <i class="far fa-envelope"></i>
-        <span>Surat Masuk</span>
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{{route('suratkeluar')}}">
-        <i class="far fa-envelope-open"></i>
-        <span>Surat Keluar</span>
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{{route('requests')}}">
-        <i class="fas fa-fw fa-hourglass-half"></i>
-        <span>Request</span>
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{{route('response')}}">
-        <i class="fas fa-fw fa-clipboard-check"></i>
-        <span>Response</span>
-    </a>
-</li>
-{{-- <li class="nav-item">
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.surat-masuk.index') }}">
+            <i class="far fa-envelope"></i>
+            <span>Surat Masuk</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('suratkeluar') }}">
+            <i class="far fa-envelope-open"></i>
+            <span>Surat Keluar</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.request-surat.index') }}">
+            <i class="fas fa-fw fa-hourglass-half"></i>
+            <span>Request</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('response') }}">
+            <i class="fas fa-fw fa-clipboard-check"></i>
+            <span>Response</span>
+        </a>
+    </li>
+    {{-- <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
         aria-expanded="true" aria-controls="collapseTwo">
         <i class="fas fa-fw fa-cog"></i>
@@ -65,8 +65,8 @@
     </div>
 </li> --}}
 
-<!-- Nav Item - Utilities Collapse Menu -->
-{{-- <li class="nav-item">
+    <!-- Nav Item - Utilities Collapse Menu -->
+    {{-- <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
         aria-expanded="true" aria-controls="collapseUtilities">
         <i class="fas fa-fw fa-wrench"></i>
@@ -84,10 +84,10 @@
     </div>
 </li> --}}
 
-<!-- Divider -->
-<hr class="sidebar-divider">
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
-{{-- <!-- Heading -->
+    {{-- <!-- Heading -->
 <div class="sidebar-heading">
     Profil
 </div>
@@ -113,34 +113,34 @@
     </div>
 </li> --}}
 
-<!-- Nav Item - Charts -->
-{{-- <li class="nav-item">
+    <!-- Nav Item - Charts -->
+    {{-- <li class="nav-item">
     <a class="nav-link" href="charts.html">
         <i class="fas fa-fw fa-user"></i>
         <span>Profil Saya</span></a>
 </li> --}}
-{{-- <li class="nav-item">
+    {{-- <li class="nav-item">
     <a class="nav-link" href="charts.html">
         <i class="fas fa-fw fa-user-edit"></i>
         <span>Edit Profil</span></a>
 </li> --}}
 
 
-<!-- Nav Item - Tables -->
-{{-- <li class="nav-item">
+    <!-- Nav Item - Tables -->
+    {{-- <li class="nav-item">
     <a class="nav-link" href="tables.html">
         <i class="fas fa-fw fa-user-lock"></i>
         <span>Ubah Kata Sandi </span></a>
-</li>  --}}
+</li> --}}
 
-<!-- Divider -->
-{{-- <hr class="sidebar-divider d-none d-md-block">
+    <!-- Divider -->
+    {{-- <hr class="sidebar-divider d-none d-md-block">
 
 <!-- Sidebar Toggler (Sidebar) -->
 <div class="text-center d-none d-md-inline">
     <button class="rounded-circle border-0" id="sidebarToggle"></button>
 </div> --}}
 
-<!-- Sidebar Message -->
+    <!-- Sidebar Message -->
 
 </ul>

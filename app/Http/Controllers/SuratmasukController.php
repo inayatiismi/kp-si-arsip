@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Suratmasuk;
-use App\Models\Requests;
+use App\Constants;
+use App\Models\Surat_masuk;
 use Illuminate\Http\Request;
 
-
-class SuratmasukController extends Controller
+class SuratMasukController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +15,9 @@ class SuratmasukController extends Controller
      */
     public function index()
     {
-        $data_suratmasuk = Suratmasuk::orderBy('created_at', 'DESC')->get();
+        $suratMasuk =  Surat_masuk::orderBy('created_at', 'DESC')->paginate();
 
-        return view('pages.mastermasuk.suratmasuk', ['data_suratmasuk' => $data_suratmasuk]);
+        return view('pages.mastermasuk.suratmasuk', compact('suratMasuk'));
     }
 
     /**
@@ -39,48 +38,43 @@ class SuratmasukController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'file' => 'nullable|mimes:pdf,doc,docx,jpg|max:5096'
         ]);
 
-        $masuk = new Suratmasuk;
-        $masuk->nomorberkas = $request['nomorberkas'];
-        $masuk->alamatpengirim = $request['alamatpengirim'];
-        $masuk->tanggalmasuk = $request['tanggalmasuk'];
-        $masuk->perihal = $request['perihal'];
-        $masuk->nomorpetunjuk = $request['nomorpetunjuk'];
-        $masuk->status = 'proses';
-        $masuk->save();
+        $surat_masuk = new Surat_masuk;
+        $surat_masuk->nomor_berkas = $request->nomor_berkas;
+        $surat_masuk->alamat_pengirim = $request->alamat_pengirim;
+        $surat_masuk->tanggal_masuk = $request->tanggal_masuk;
+        $surat_masuk->perihal = $request->perihal;
+        $surat_masuk->nomor_petunjuk = $request->nomor_petunjuk;
+        $surat_masuk->status_id = Constants::STATUS_ON_PROCESS;
+        $surat_masuk->save();
 
-        $dataRequest = new Requests();
-        $dataRequest->id_suratmasuk = $masuk->id_suratmasuk;
-        $dataRequest->nomorberkas = $masuk->nomorberkas;
-        $dataRequest->jenissurat = 'masuk';
-        $dataRequest->alamatsurat = $masuk->alamatpengirim;
-        $dataRequest->tanggalsurat = $masuk->tanggalmasuk;
-        $dataRequest->perihal = $masuk->perihal;
-        $dataRequest->nomorpetunjuk = $masuk->nomorpetunjuk;
-        $dataRequest->status = $masuk->status;
-        $dataRequest->save();
+        $dataRequest = [
+            'jenis_surat_id' => Constants::JENIS_SURAT_MASUK,
+            'surat_masuk_id' => $surat_masuk->id
+        ];
+
+        $surat_masuk->request()->create($dataRequest);
 
         if ($request->has('file') && $request->file('file')->isValid()) {
-            $masuk->addMediaFromRequest('file')
+            $surat_masuk->addMediaFromRequest('file')
                 ->toMediaCollection('surat_masuk');
         }
 
         return redirect()
-            ->to(route('suratmasuk'))
+            ->to(route('admin.surat-masuk.index'))
             ->withSuccess('Berhasil menambah surat masuk');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Surat_masuk  $surat_masuk
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Surat_masuk $surat_masuk)
     {
         //
     }
@@ -88,46 +82,65 @@ class SuratmasukController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Surat_masuk  $surat_masuk
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Surat_masuk $surat_masuk)
     {
-        $masuk = Suratmasuk::find($id);
-        return view('pages.mastermasuk.editsuratmasuk')->with('masuk', $masuk);
+        return view('pages.mastermasuk.edit', compact('surat_masuk'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Surat_masuk  $surat_masuk
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id_suratmasuk)
+    public function update(Request $request, Surat_masuk $surat_masuk)
     {
-        $ubah = Suratmasuk::findorfail($id_suratmasuk);
+        $request->validate([
+            'file' => 'nullable|mimes:pdf,doc,docx,jpg|max:5096'
+        ]);
 
-        $data = [
-            'nomorberkas' => $request['nomorberkas'],
-            'alamatpengirim' => $request['alamatpengirim'],
-            'tanggalmasuk' => $request['tanggalmasuk'],
-            'perihal' => $request['perihal'],
-            'nomorpetunjuk' => $request['nomorpetunjuk']
-        ];
-        $ubah->update($data);
-        return redirect('suratmasuk');
+        $surat_masuk->nomor_berkas = $request->nomor_berkas;
+        $surat_masuk->alamat_pengirim = $request->alamat_pengirim;
+        $surat_masuk->tanggal_masuk = $request->tanggal_masuk;
+        $surat_masuk->perihal = $request->perihal;
+        $surat_masuk->nomor_petunjuk = $request->nomor_petunjuk;
+        $surat_masuk->status_id = Constants::STATUS_ON_PROCESS;
+        $surat_masuk->save();
+
+        if ($request->has('file') && $request->file('file')->isValid()) {
+            if (isset($surat_masuk->media[0])) {
+                $surat_masuk->media[0]->delete();
+            }
+
+            $surat_masuk->addMediaFromRequest('file')
+                ->toMediaCollection('surat_masuk');
+        }
+
+        return redirect()
+            ->to(route('admin.surat-masuk.index'))
+            ->withSuccess('Berhasil memperbarui surat masuk');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Surat_masuk  $surat_masuk
      * @return \Illuminate\Http\Response
      */
-    public function delete(Suratmasuk $masuk)
+    public function destroy(Surat_masuk $surat_masuk)
     {
-        $masuk->delete();
-        return redirect('suratmasuk');
+        if (isset($surat_masuk->media[0])) {
+            $surat_masuk->media[0]->delete();
+        }
+
+        $surat_masuk->delete();
+
+        return redirect()
+            ->to(route('admin.surat-masuk.index'))
+            ->withSuccess('Berhasil menghapus surat masuk');
     }
 }

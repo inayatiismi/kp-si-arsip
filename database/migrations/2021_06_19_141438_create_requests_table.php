@@ -14,18 +14,17 @@ class CreateRequestsTable extends Migration
     public function up()
     {
         Schema::create('requests', function (Blueprint $table) {
-            $table->integer('id_requests');
-            $table->integer('id_suratmasuk')->nullable();
-            $table->integer('id_suratkeluar')->nullable();
-            $table->string('nomorberkas');
-            $table->string('jenissurat');
-            $table->string('alamatsurat');
-            $table->date('tanggalsurat');
-            $table->string('perihal');
-            $table->string('nomorpetunjuk');
-            $table->string('status');
+            $table->id();
+            $table->unsignedBigInteger('surat_masuk_id')->nullable();
+            $table->unsignedBigInteger('jenis_surat_id')->nullable();
             $table->mediumText('keterangan')->nullable();
             $table->timestamps();
+
+            $table->index('surat_masuk_id');
+            $table->index('jenis_surat_id');
+
+            $table->foreign('surat_masuk_id')->references('id')->on('surat_masuk')->onDelete('CASCADE')->onUpdate('NO ACTION');
+            $table->foreign('jenis_surat_id')->references('id')->on('jenis_surat')->onDelete('NO ACTION')->onUpdate('NO ACTION');
         });
     }
 

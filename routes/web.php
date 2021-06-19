@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RequestsController;
+use App\Http\Controllers\SuratMasukController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,23 +21,24 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::group(['middleware' => 'admin'], function()
-{
+Route::group(['middleware' => 'admin', 'as' => 'admin.'], function(){
+    Route::resource('surat-masuk', SuratMasukController::class);
+
     Route::get('/tambahsuratmasuk', [App\Http\Controllers\SuratmasukController::class, 'create'])->name('tambahsuratmasuk');
     Route::post('/simpansuratmasuk', [App\Http\Controllers\SuratmasukController::class, 'store'])->name('simpansuratmasuk');
     Route::get('/suratmasuk/{masuk}/delete', [App\Http\Controllers\SuratmasukController::class, 'delete'])->name('suratmasuk-delete-masuk');
     Route::get('/suratmasuk/{masuk}/edit', [App\Http\Controllers\SuratmasukController::class,'edit'])->name('suratmasuk-edit-masuk');
     Route::post('/suratmasuk/{masuk}/update', [App\Http\Controllers\SuratmasukController::class,'update'])->name('suratmasuk-update-masuk');
-    
+
     Route::get('/tambahsuratkeluar', [App\Http\Controllers\SuratkeluarController::class, 'create'])->name('tambahsuratkeluar');
     Route::post('/simpansuratkeluar', [App\Http\Controllers\SuratkeluarController::class, 'store'])->name('simpansuratkeluar');
     Route::get('/suratkeluar/{keluar}/delete', [App\Http\Controllers\SuratkeluarController::class, 'delete'])->name('suratkeluar-delete-keluar');
     Route::get('/suratkeluar/{keluar}/edit', [App\Http\Controllers\SuratkeluarController::class,'edit'])->name('suratkeluar-edit-keluar');
     Route::post('/suratkeluar/{keluar}/update', [App\Http\Controllers\SuratkeluarController::class,'update'])->name('suratkeluar-update-keluar');
-    
+
     Route::get('/tambahrequest', [App\Http\Controllers\RequestsController::class, 'create'])->name('tambahrequest');
     Route::post('/simpanrequest', [App\Http\Controllers\RequestsController::class, 'store'])->name('simpanrequest');
-    
+
     Route::get('/tambahresponse', [App\Http\Controllers\ResponseController::class, 'create'])->name('tambahresponse');
 });
 

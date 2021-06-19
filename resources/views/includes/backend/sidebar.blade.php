@@ -27,7 +27,7 @@
 </div>
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item">
-    <a class="nav-link" href="{{route('suratmasuk')}}">
+    <a class="nav-link" href="{{route('admin.surat-masuk.index')}}">
         <i class="far fa-envelope"></i>
         <span>Surat Masuk</span>
     </a>

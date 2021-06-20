@@ -39,7 +39,7 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    
+
 
                     <!-- Topbar Navbar -->
                     @include('includes.backend.navbar')
@@ -91,7 +91,7 @@
         </div>
     </div> --}}
 
-@include('includes.backend.script')  
+@include('includes.backend.script')
 
 </body>
 

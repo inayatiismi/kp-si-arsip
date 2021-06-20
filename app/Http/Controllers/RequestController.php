@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants;
 use App\Models\Surat_masuk;
+use App\Models\Surat_keluar;
 use Illuminate\Http\Request;
 use App\Models\Request_surat;
 
@@ -16,7 +17,7 @@ class RequestController extends Controller
      */
     public function index()
     {
-        $requests = Request_surat::where('status_id', '!=', Constants::STATUS_ACCEPTED)
+        $requests = Request_surat::where('status_id', Constants::STATUS_ON_PROCESS)
             ->with(['suratMasuk', 'jenisSurat', 'status'])
             ->orderBy('created_at', 'DESC')
             ->paginate();
@@ -78,7 +79,10 @@ class RequestController extends Controller
     {
         $action = $request->action;
         if ($request_surat->jenis_surat_id == Constants::JENIS_SURAT_MASUK) {
-            $surat = Surat_masuk::find($request_surat->surat_masuk_id);
+            $surat = Surat_masuk::findOrFail($request_surat->surat_masuk_id);
+        }
+        else {
+            $surat = Surat_keluar::findOrFail($request_surat->surat_keluar_id);
         }
 
         switch ($action) {
@@ -99,7 +103,7 @@ class RequestController extends Controller
                 $request_surat->keterangan = $request->keterangan;
                 $request_surat->save();
 
-                $surat->status_id = Constants::STATUS_ACCEPTED;
+                $surat->status_id = Constants::STATUS_DECLINED;
                 $surat->save();
 
                 return redirect()

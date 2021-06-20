@@ -3,31 +3,14 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        @if (auth()->user()->role == 'admin')
-            <a href="{{ route('admin.surat-masuk.create') }}" class="btn btn-warning mb-3"><i
-                    class="fa fa-plus-square mr-2"></i>Tambah Data</a>
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length"
-                                aria-controls="example1"
-                                class="custom-select custom-select-sm form-control form-control-sm">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select> entries</label>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-6">
-                    <div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search"
-                                class="form-control form-control-sm" placeholder="" aria-controls="example1"></label>
-                    </div>
-                </div>
-            </div>
-        @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Surat Masuk</h6>
+                @if (auth()->user()->role == 'admin')
+                    <a href="{{ route('admin.surat-masuk.create') }}" class="btn btn-warning mb-3 float-right"
+                        style="margin-top: -25px;"><i
+                            class="fa fa-plus-square mr-2"></i>Tambah Data</a>
+                @endif
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -76,13 +59,16 @@
                                     </td>
                                     @if (auth()->user()->role == 'admin')
                                         <td>
-                                            <a href="{{ route('admin.surat-masuk.edit', $item->id) }}" class="btn btn-info btn-sm">
+                                            <a href="{{ route('admin.surat-masuk.edit', $item->id) }}"
+                                                class="btn btn-info btn-sm">
                                                 <i class="fas fa-edit"></i></a>
-                                            <form action="{{ route('admin.surat-masuk.destroy', $item->id) }}" method="post">
+                                            <form action="{{ route('admin.surat-masuk.destroy', $item->id) }}"
+                                                method="post">
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                                <button type="submit" class="btn btn-danger btn-sm"><i
+                                                        class="fa fa-trash"></i></button>
                                             </form>
                                         </td>
                                     @endif

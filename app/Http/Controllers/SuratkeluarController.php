@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Suratkeluar;
+use App\Constants;
+use App\Models\Surat_keluar;
 use Illuminate\Http\Request;
 
-class SuratkeluarController extends Controller
+class SuratKeluarController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,9 @@ class SuratkeluarController extends Controller
      */
     public function index()
     {
-        $data_suratkeluar = Suratkeluar::all();
-        return view('pages.masterkeluar.suratkeluar', ['data_suratkeluar'=> $data_suratkeluar]);
+        $suratKeluar =  Surat_keluar::orderBy('created_at', 'DESC')->paginate();
+
+        return view('pages.masterkeluar.suratkeluar', compact('suratKeluar'));
     }
 
     /**
@@ -36,26 +38,44 @@ class SuratkeluarController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        $keluar = new Suratkeluar;
-        $keluar->nomorberkas = $request['nomorberkas'];
-        $keluar->alamatpenerima = $request['alamatpenerima'];
-        $keluar->tanggalkeluar = $request['tanggalkeluar'];
-        $keluar->perihal = $request['perihal'];
-        $keluar->nomorpetunjuk = $request['nomorpetunjuk'];
-        $masuk->status = $request['status'];
-        $keluar->save();
+        $request->validate([
+            'file' => 'nullable|mimes:pdf,doc,docx,jpg|max:5096'
+        ]);
 
-        return redirect('suratkeluar');
+        $surat_keluar = new Surat_keluar;
+        $surat_keluar->nomor_berkas = $request->nomor_berkas;
+        $surat_keluar->alamat_penerima = $request->alamat_penerima;
+        $surat_keluar->tanggal_keluar = $request->tanggal_keluar;
+        $surat_keluar->perihal = $request->perihal;
+        $surat_keluar->nomor_petunjuk = $request->nomor_petunjuk;
+        $surat_keluar->status_id = Constants::STATUS_ON_PROCESS;
+        $surat_keluar->save();
+
+        $dataRequest = [
+            'surat_keluar_id' => $surat_keluar->id,
+            'jenis_surat_id' => Constants::JENIS_SURAT_KELUAR,
+            'status_id' => Constants::STATUS_ON_PROCESS
+        ];
+
+        $surat_keluar->request()->create($dataRequest);
+
+        if ($request->has('file') && $request->file('file')->isValid()) {
+            $surat_keluar->addMediaFromRequest('file')
+                ->toMediaCollection('surat_keluar');
+        }
+
+        return redirect()
+            ->to(route('admin.surat-keluar.index'))
+            ->withSuccess('Berhasil menambah surat keluar');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Surat_keluar  $surat_keluar
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Surat_keluar $surat_keluar)
     {
         //
     }
@@ -63,46 +83,65 @@ class SuratkeluarController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Surat_keluar  $surat_keluar
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Surat_keluar $surat_keluar)
     {
-        $keluar = Suratkeluar::find($id);
-        return view('pages.masterkeluar.editsuratkeluar')->with('keluar',$keluar);
+        return view('pages.masterkeluar.edit', compact('surat_keluar'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Surat_keluar  $surat_keluar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id_suratkeluar)
+    public function update(Request $request, Surat_keluar $surat_keluar)
     {
-        $ubah = Suratkeluar::findorfail($id_suratkeluar);
+        $request->validate([
+            'file' => 'nullable|mimes:pdf,doc,docx,jpg|max:5096'
+        ]);
 
-        $data = [
-            'nomorberkas' => $request['nomorberkas'],
-            'alamatpenerima' => $request['alamatpenerima'],
-            'tanggalkeluar' => $request['tanggalkeluar'],
-            'perihal' => $request['perihal'],
-            'nomorpetunjuk' => $request['nomorpetunjuk']
-        ];
-        $ubah->update($data);
-        return redirect ('suratkeluar');
+        $surat_keluar->nomor_berkas = $request->nomor_berkas;
+        $surat_keluar->alamat_penerima = $request->alamat_penerima;
+        $surat_keluar->tanggal_keluar = $request->tanggal_keluar;
+        $surat_keluar->perihal = $request->perihal;
+        $surat_keluar->nomor_petunjuk = $request->nomor_petunjuk;
+        $surat_keluar->status_id = Constants::STATUS_ON_PROCESS;
+        $surat_keluar->save();
+
+        if ($request->has('file') && $request->file('file')->isValid()) {
+            if (isset($surat_keluar->media[0])) {
+                $surat_keluar->media[0]->delete();
+            }
+
+            $surat_keluar->addMediaFromRequest('file')
+                ->toMediaCollection('surat_keluar');
+        }
+
+        return redirect()
+            ->to(route('admin.surat-keluar.index'))
+            ->withSuccess('Berhasil memperbarui surat keluar');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Surat_keluar  $surat_keluar
      * @return \Illuminate\Http\Response
      */
-    public function delete(Suratkeluar $keluar)
+    public function destroy(Surat_keluar $surat_keluar)
     {
-        $keluar->delete();
-        return redirect('suratkeluar');
+        if (isset($surat_keluar->media[0])) {
+            $surat_keluar->media[0]->delete();
+        }
+
+        $surat_keluar->delete();
+
+        return redirect()
+            ->to(route('admin.surat-keluar.index'))
+            ->withSuccess('Berhasil menghapus surat keluar');
     }
 }

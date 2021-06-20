@@ -9,7 +9,7 @@ class Request_surat extends Model
 {
     use HasFactory;
 
-    public $fillable = ['jenis_surat_id', 'surat_masuk_id', 'status_id'];
+    public $fillable = ['jenis_surat_id', 'surat_masuk_id', 'surat_keluar_id', 'status_id'];
     public $table = 'requests';
 
     public function jenisSurat()
@@ -20,6 +20,11 @@ class Request_surat extends Model
     public function suratMasuk()
     {
         return $this->hasOne(Surat_masuk::class, 'id', 'surat_masuk_id');
+    }
+
+    public function suratKeluar()
+    {
+        return $this->hasOne(Surat_keluar::class, 'id', 'surat_keluar_id');
     }
 
     public function status()

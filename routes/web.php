@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\RequestsController;
+use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\SuratMasukController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +27,9 @@ Auth::routes();
 
 Route::group(['middleware' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('surat-masuk', SuratMasukController::class);
+    Route::resource('surat-keluar', SuratKeluarController::class);
     Route::resource('request-surat', RequestController::class)->only(['index', 'show', 'update']);
+    Route::resource('response-surat', ResponseController::class)->only(['index', 'show']);
 
     Route::get('/tambahsuratkeluar', [App\Http\Controllers\SuratkeluarController::class, 'create'])->name('tambahsuratkeluar');
     Route::post('/simpansuratkeluar', [App\Http\Controllers\SuratkeluarController::class, 'store'])->name('simpansuratkeluar');

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants;
 use Illuminate\Http\Request;
+use App\Models\Request_surat;
 
 class ResponseController extends Controller
 {
@@ -13,7 +15,12 @@ class ResponseController extends Controller
      */
     public function index()
     {
-        return view ('pages.masterresponse.response');
+        $requests = Request_surat::where('status_id', '!=', Constants::STATUS_ON_PROCESS)
+            ->with(['suratMasuk', 'jenisSurat', 'status'])
+            ->orderBy('created_at', 'DESC')
+            ->paginate();
+
+        return view('pages.masterresponse.response', compact('requests'));
     }
 
     /**
@@ -23,7 +30,7 @@ class ResponseController extends Controller
      */
     public function create()
     {
-        return view('pages.masterresponse.tambahresponse');
+        //
     }
 
     /**
@@ -40,10 +47,10 @@ class ResponseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Request_surat  $request_surat
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request_surat $request_surat)
     {
         //
     }
@@ -51,10 +58,10 @@ class ResponseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Request_surat  $request_surat
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request_surat $request_surat)
     {
         //
     }
@@ -63,10 +70,10 @@ class ResponseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Request_surat  $request_surat
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Request_surat $request_surat)
     {
         //
     }
@@ -74,10 +81,10 @@ class ResponseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Request_surat  $request_surat
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request_surat $request_surat)
     {
         //
     }

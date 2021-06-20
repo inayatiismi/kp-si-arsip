@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Surat_masuk extends Model implements HasMedia
+class Surat_keluar extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
-
-    public $table = 'surat_masuk';
+    
+    public $table = 'surat_keluar';
 
     public function status()
     {
@@ -20,6 +20,6 @@ class Surat_masuk extends Model implements HasMedia
 
     public function request()
     {
-        return $this->belongsTo(Request_surat::class, 'id', 'surat_masuk_id');
+        return $this->belongsTo(Request_surat::class, 'id', 'surat_keluar_id');
     }
 }

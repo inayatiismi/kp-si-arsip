@@ -26,15 +26,23 @@
                         </thead>
                         <tbody>
                             @foreach ($requests as $request)
-
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $request->suratMasuk->nomor_berkas }}</td>
-                                    <td>{{ $request->jenisSurat->jenis }}</td>
-                                    <td>{{ $request->suratMasuk->alamat_pengirim }}</td>
-                                    <td>{{ $request->suratMasuk->tanggal_masuk }}</td>
-                                    <td>{{ $request->suratMasuk->perihal }}</td>
-                                    <td>{{ $request->suratMasuk->nomor_petunjuk }}</td>
+                                    @if ($request->jenis_surat_id == getConstants()::JENIS_SURAT_MASUK)
+                                        <td>{{ $request->suratMasuk->nomor_berkas }}</td>
+                                        <td>{{ $request->jenisSurat->jenis }}</td>
+                                        <td>{{ $request->suratMasuk->alamat_pengirim }}</td>
+                                        <td>{{ $request->suratMasuk->tanggal_masuk }}</td>
+                                        <td>{{ $request->suratMasuk->perihal }}</td>
+                                        <td>{{ $request->suratMasuk->nomor_petunjuk }}</td>
+                                    @else
+                                        <td>{{ $request->suratKeluar->nomor_berkas }}</td>
+                                        <td>{{ $request->jenisSurat->jenis }}</td>
+                                        <td>{{ $request->suratKeluar->alamat_penerima }}</td>
+                                        <td>{{ $request->suratKeluar->tanggal_keluar }}</td>
+                                        <td>{{ $request->suratKeluar->perihal }}</td>
+                                        <td>{{ $request->suratKeluar->nomor_petunjuk }}</td>
+                                    @endif
                                     <td>
                                         @if ($request->status_id == getConstants()::STATUS_ON_PROCESS)
                                             <span class="badge badge-info">{{ $request->status->status }}</span>
@@ -54,6 +62,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="card-footer">
+                {{ $requests->links() }}
             </div>
         </div>
     </div>
